@@ -1,12 +1,12 @@
 class connection {
-    constructor(computerConnection, mobileConnection) {
+    constructor(mobileConnection, computerConnection, name) {
         // should be a computer connction
         this.computer = computerConnection;
         
         // should be a mobile connection
         this.mobile = mobileConnection;
 
-        this.user = "";
+        this.user = name;
     }
 
     newComputerConnect(newComp) {

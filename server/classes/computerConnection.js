@@ -1,7 +1,8 @@
 class computerConnection {
-    constructor() {
-        this.port = -1;
-        this.ipAddress = -1;
+    constructor(newAddress, newPort, name) {
+        this.port = newPort;
+        this.ipAddress = newAddress;
+        this.id = name;
     }
 
     setPort(newPort) {
