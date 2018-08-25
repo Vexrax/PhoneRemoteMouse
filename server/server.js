@@ -10,45 +10,17 @@ const connectEmitter = new EventEmitter();
 
 var store = new connections(connectEmitter);
 
+var dataCache = [];
+var lastID = -1, acceptableRange = 1;
 var server = http.createServer(function(request, res) {
-    console.log("LMAO");
     if(request.method == "GET") {
         res.write("Not a get endpoint");
         res.end();
     }
     else if (request.method == "POST") {
-        //get values and start storing
-        var ip, port;
-        try {
-            ip = request;
-        } catch (error) {
-            
-        }
-        var body = '';
-        request.on('data', function (data) {
-            body += data;
-            console.log(body);
-            return;
-            // 1e6 === 1 * Math.pow(10, 6) === 1 * 1000000 ~~~ 1MB
-            if (body.length > 1e6) { 
-                // FLOOD ATTACK OR FAULTY CLIENT, NUKE REQUEST
-                request.connection.destroy();
-            }
-
-            requestAddress = request.connection.remoteAddress;
-            jsonRes = JSON.parse(body);
-            if(jsonRes.type == "COMPUTER") {
-                store.addComputer(new computerConnection(requestAddress, jsonRes.port, jsonRes.name));
-            }
-            else if(jsonRes.type == "MOBILE") {
-                store.addMobile(new mobileConnection(requestAddress, jsonRes.port, jsonRes.name));
-            }
-            else {
-                console.log("unidentified connection");
-            }
-        });
-        
-        return 'lmao';
+        res.write(JSON.stringify({dataCache}));
+        res.end();
+        dataCache = [];
     }
 });
 
@@ -65,7 +37,18 @@ wsServer.on('request', (request) => {
     console.log("connections"); 
     webConnection = request.accept();
     webConnection.on('message', (data) => {
-        console.log(data);
+        // Convert acceleration data to movement data
+        try {
+            data = data.utf8Data;
+            data = JSON.parse(data);
+        }
+        catch(error) {
+            return;
+        }
+        for(i in data) {
+            data[i] = data[i] * 20; //the 20 is liable to change
+        }
+        dataCache.push(data);
     })
 
     id = "temp";
@@ -84,6 +67,7 @@ wsServer.on('request', (request) => {
     }  
 });
 
+ 
 connectEmitter.on("connectionMade", (connection) => {
     // wsServer.
     console.log('lmao');

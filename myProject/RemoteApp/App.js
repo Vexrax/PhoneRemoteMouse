@@ -22,7 +22,6 @@ export default class GyroscopeSensor extends React.Component {
     this.ws.onopen = () => {
         // connection opened
         this.wsFound = true;
-        this.ws.send('something'); // send a message
     };
 }
   state = {
@@ -72,10 +71,9 @@ export default class GyroscopeSensor extends React.Component {
     // this.ws = new WebSocket('http://77d6dce4.ngrok.io');
     // this.ws.onopen = () => {
     //   // connection opened
-    //   this.ws.send('something'); // send a message
     // };
     if(this.wsFound) {
-        // this.ws.send(JSON.stringify({x: x, y: y, z: z}));
+        this.ws.send(JSON.stringify({x: x, y: y, z: z}));
     } 
 
 
