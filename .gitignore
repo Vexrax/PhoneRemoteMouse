@@ -1,6 +1,9 @@
+<<<<<<< HEAD
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+=======
+>>>>>>> 8d2dfe2770bad15e53b0605738c33810b8c6da16
 node_modules
