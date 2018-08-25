@@ -45,6 +45,26 @@ export default class GyroscopeSensor extends React.Component {
     }
   }
 
+  _sendLeftClick = () => {
+    if(this.wsFound)
+    {
+      let { x, y, z } = this.state.gyroscopeData;
+      this.ws.send(JSON.stringify({x:x, y:y, z:z, side:"left"}))
+      console.log(x+", "+ y+", "+z+", left");
+    }
+  }
+
+  _sendRightClick = () => {
+    if(this.wsFound)
+    {
+      let { x, y, z } = this.state.gyroscopeData;
+      this.ws.send(JSON.stringify({x:x, y:y, z:z, side:"right"}))
+      console.log(x+", "+ y+", "+z+", right");
+    }
+  }
+
+  
+
   _slow = () => {
     Gyroscope.setUpdateInterval(1000);
   }
@@ -82,19 +102,16 @@ export default class GyroscopeSensor extends React.Component {
       <View style={styles.sensor}>
 
         <View style={styles.mContainer}>
-          <TouchableOpacity style={styles.mButton}>
-            <Text style={styles.middlebuttontext}>M</Text>
-          </TouchableOpacity>
-        </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity  style={styles.lbutton}>
+          <TouchableOpacity onPress={this._sendLeftClick}  style={styles.lbutton}>
             <Text>L</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.rbutton}>
+          <TouchableOpacity _sendRightClick style={styles.rbutton}>
             <Text style={styles.rightbuttontext}>R</Text>
           </TouchableOpacity>
         </View>
+      </View>
       </View>
     );
   }
