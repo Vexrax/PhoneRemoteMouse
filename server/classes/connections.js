@@ -1,6 +1,6 @@
 class connections {
-    constructor() {
-        // key is mobile ip address
+    constructor(eventEmitter) {
+        // key is mobile websocket
         this.connecs = {}
 
         // key is user id
@@ -10,35 +10,44 @@ class connections {
         this.unassignedComputers = {}
 
         this.connections = require('./connection');
+
+        this.emitter = eventEmitter;
     }
     
     addMobile(mobileConnection) {
         // This user has connected a computer already
-        if(this.unassignedComputers[mobileConnection.name]) {
+        if(this.unassignedComputers[mobileConnection.id]) {
             // Move connections to completed and create a new connection object
-            this.connecs[mobileConnection.ipAddress] = new this.connections(mobileConnection, this.unassignedComputers[mobileConnection.name], mobileConnection.name);
+            this.connecs[mobileConnection.websocket] = new this.connections(mobileConnection, this.unassignedComputers[mobileConnection.id], mobileConnection.id);
             // Remove old connection
-            delete this.unassignedComputers[mobileConnection.name];
+            delete this.unassignedComputers[mobileConnection.id];
+            console.log("New Pair Added");
+            this.emitter.emit('connectionMade', this.connecs[mobileConnection.websocket])
         }
         // This user has not connected a computer yet
         else {
             // Move connections to completed and create a new connection object
-            this.unassignedMobiles[mobileConnection.name] = mobileConnection;
+            this.unassignedMobiles[mobileConnection.id] = mobileConnection;
+            console.log("Unassigned Mobile Added");
         }
     }
 
     addComputer(computerConnection) {
         // User has connected a mobile connection already
-        if(this.unassignedMobiles[computerConnection.name]) {
-            mobileConnection = this.unassignedMobiles[computerConnection.name];
+        if(this.unassignedMobiles[computerConnection.id]) {
+            var mobileConnection = this.unassignedMobiles[computerConnection.id];
             // move connections to completed
-            this.connecs[mobileConnection.ipAddress] = new this.connections(mobileConnection, computerConnection, computerConnection.name);;
+            this.connecs[mobileConnection.websocket] = new this.connections(mobileConnection, computerConnection, computerConnection.id);;
             // Remove old connection
-            delete this.unassignedMobiles[computerConnection.name];
+            delete this.unassignedMobiles[computerConnection.id];
+            console.log("New Pair Added");
+            this.emitter.emit('connectionMade', this.connecs[mobileConnection.websocket])
+
         }
         // User doesn't have a mobile connection yet
         else {
             this.unassignedComputers[computerConnection.name] = computerConnection;
+            console.log("Unassigned Computer Added");
         }
     }
 

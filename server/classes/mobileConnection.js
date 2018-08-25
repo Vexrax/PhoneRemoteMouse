@@ -1,12 +1,7 @@
 class mobileConnection {
-    constructor(newAddress, newPort, name) {
-        this.port = newPort;
-        this.ipAddress = newAddress;
+    constructor(newSocket, name) {
+        this.websocket = newSocket;
         this.id = name;
-    }
-
-    setPort(newPort) {
-        this.port = newPort;
     }
 }
 

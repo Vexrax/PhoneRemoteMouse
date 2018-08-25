@@ -1,0 +1,20 @@
+branch-defaults:
+  default:
+    environment: test1
+environment-defaults:
+  test1:
+    branch: null
+    repository: null
+global:
+  application_name: server
+  default_ec2_keyname: null
+  default_platform: arn:aws:elasticbeanstalk:ca-central-1::platform/Node.js running
+    on 64bit Amazon Linux/4.5.3
+  default_region: ca-central-1
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: eb-cli
+  sc: null
+  workspace_type: Application
