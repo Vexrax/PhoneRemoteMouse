@@ -10,13 +10,20 @@ import {
   TouchableOpacity
 } from 'react-native';
 
-import io from 'socket.io-client/socket.io';
 
 export default class GyroscopeSensor extends React.Component {
   constructor() {
     super();
-    this.socket = io('http://77d6dce4.ngrok.io', {jsonp: false});
-  }
+    this.ws = new WebSocket('http://b0565861.ngrok.io');
+    this.wsFound = false;
+    console.log('kk');
+    this.ws.onopen = () => {
+        // connection opened
+        console.log('lmao');
+        this.wsFound = true;
+        this.ws.send('something'); // send a message
+    };
+}
   state = {
     gyroscopeData: {},
   }
@@ -66,7 +73,9 @@ export default class GyroscopeSensor extends React.Component {
     //   // connection opened
     //   this.ws.send('something'); // send a message
     // };
- 
+    if(this.wsFound) {
+        this.ws.send(x + ":" + y + ":" + z);
+    } 
 
 
 

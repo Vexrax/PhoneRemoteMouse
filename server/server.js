@@ -52,6 +52,10 @@ wsServer = new WebSocketServer({
     httpServer: server
 });
 
+wsServer.on('message', (data) => {
+    console.log(data);
+});
+
 wsServer.on('request', (request) => {
     // For now accept all requests and save the connection
     console.log("connections"); 
