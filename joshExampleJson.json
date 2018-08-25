@@ -1,0 +1,8 @@
+{
+    "id": 1,
+    "eventType": "EVENT_TYPE",
+    "data": {
+        "dX": 1,
+        "dY": 1
+    }
+}
