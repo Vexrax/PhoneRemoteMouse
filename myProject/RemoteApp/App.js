@@ -10,7 +10,6 @@ import {
   TouchableOpacity
 } from 'react-native';
 
-
 export default class GyroscopeSensor extends React.Component {
   constructor() {
     super();
@@ -24,6 +23,7 @@ export default class GyroscopeSensor extends React.Component {
         this.wsFound = true;
         this.ws.send('something'); // send a message
     };
+    this.index=0;
 }
   state = {
     gyroscopeData: {},
@@ -64,36 +64,35 @@ export default class GyroscopeSensor extends React.Component {
     this._subscription = null;
   }
 
-  
+
   
   render() {
     let { x, y, z } = this.state.gyroscopeData;
-
     // this.ws = new WebSocket('http://77d6dce4.ngrok.io');
     // this.ws.onopen = () => {
     //   // connection opened
     //   this.ws.send('something'); // send a message
     // };
     if(this.wsFound) {
-        // this.ws.send(JSON.stringify({x: x, y: y, z: z}));
+        this.index=this.index+1;
+         this.ws.send(JSON.stringify({x: x, y: y, z: z, i:this.index}));
     } 
-
-
 
     return (
       <View style={styles.sensor}>
-        <Text>Gyroscope:</Text>
-        <Text>x: {round(x)} y: {round(y)} z: {round(z)}</Text>
+
+        <View style={styles.mContainer}>
+          <TouchableOpacity style={styles.mButton}>
+            <Text style={styles.middlebuttontext}>M</Text>
+          </TouchableOpacity>
+        </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={this._toggle} style={styles.button}>
-            <Text>Toggle</Text>
+          <TouchableOpacity  style={styles.lbutton}>
+            <Text>L</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={this._slow} style={[styles.button, styles.middleButton]}>
-            <Text>Slow</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={this._fast} style={styles.button}>
-            <Text>Fast</Text>
+          <TouchableOpacity style={styles.rbutton}>
+            <Text style={styles.rightbuttontext}>R</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -115,21 +114,41 @@ const styles = StyleSheet.create({
     flex: 1
   },
   buttonContainer: {
+    flex:1,
     flexDirection: 'row',
     alignItems: 'stretch',
     marginTop: 15,
   },
-  button: {
-    flex: 1,
+  lbutton: {
+    flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#eee',
+    backgroundColor: '#660829',
     padding: 10,
+    height: '160%'
   },
-  middleButton: {
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-    borderColor: '#ccc',
+  rbutton: {
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black',
+    padding: 10,
+    height: '160%'
+  },
+  rightbuttontext:{
+    color:'white',
+  },
+  mContainer: {
+    height: '50%'
+  },
+  mButton: {
+    backgroundColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '50%'
+  },
+  middlebuttontext: {
+    color: 'white'
   },
   sensor: {
     marginTop: 15,
