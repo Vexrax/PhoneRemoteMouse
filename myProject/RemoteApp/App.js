@@ -14,12 +14,13 @@ import {
 export default class GyroscopeSensor extends React.Component {
   constructor() {
     super();
-    this.ws = new WebSocket('http://b0565861.ngrok.io');
+    this.ws = new WebSocket('http://b0565861.ngrok.io', null, {headers: {
+        type: "MOBILE",
+        name: "test"
+    }});
     this.wsFound = false;
-    console.log('kk');
     this.ws.onopen = () => {
         // connection opened
-        console.log('lmao');
         this.wsFound = true;
         this.ws.send('something'); // send a message
     };
@@ -74,7 +75,7 @@ export default class GyroscopeSensor extends React.Component {
     //   this.ws.send('something'); // send a message
     // };
     if(this.wsFound) {
-        this.ws.send(x + ":" + y + ":" + z);
+        // this.ws.send(JSON.stringify({x: x, y: y, z: z}));
     } 
 
 

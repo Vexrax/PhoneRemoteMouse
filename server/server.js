@@ -66,7 +66,15 @@ wsServer.on('request', (request) => {
 
     id = "temp";
     // id = request.origin[0];?
-    // console.log(request.origin[0]);
+    console.log("testing");
+    // console.log(request);
+    var data = request.httpRequest.headers;
+    if(data.type == "COMPUTER") {
+        store.addComputer(new computerConnection(webConnection, data.name));
+    }
+    else if(data.type == "MOBILE") {
+        store.addMobile(new mobileConnection(webConnection, data.name));
+    }
     // console.log(request.httpRequest);
     // get values and start storing
     // var ip, port;
