@@ -45,10 +45,20 @@ wsServer.on('request', (request) => {
         catch(error) {
             return;
         }
-        for(i in data) {
-            data[i] = data[i] * 20; //the 20 is liable to change
+        if (data.eventType == "EVENT_MOVE") {
+            var staticMul = 20;
+            data.x = data.x * staticMul; //the 20 is liable to change
+            data.y = data.y * staticMul;
+            data.z = data.z * staticMul;
+            dataCache.push({id: data.i, eventType: data.eventType, 
+                data: 
+                {
+                    x: data.x,
+                    y: data.y,
+                    z: data.z    
+                }
+            });
         }
-        dataCache.push(data);
     })
 
     id = "temp";
