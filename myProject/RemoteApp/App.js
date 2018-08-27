@@ -13,16 +13,30 @@ import {
 export default class GyroscopeSensor extends React.Component {
   constructor() {
     super();
-    this.ws = new WebSocket('http://b0565861.ngrok.io', null, {headers: {
+    this.ws = new WebSocket('ws://localhost:5000', null, {headers: {
         type: "MOBILE",
         name: "test"
     }});
+    while (!this.ws.CLOSED) {
+        console.log('fak');
+    }
     this.wsFound = false;
+    console.log("starting");
     this.ws.onopen = () => {
         // connection opened
+        this.setState({connected:true})
         this.wsFound = true;
+        console.log("Joined socket");
+        this.emit = this.emit.bind(this);   
     };
+    this.ws.onclose = (e) => {
+        console.log('kys');
+        console.log(e.code);
+        console.log(e.reason);
+    }
     this.index=0;
+    
+
 }
   state = {
     gyroscopeData: {},
@@ -35,7 +49,6 @@ export default class GyroscopeSensor extends React.Component {
   componentWillUnmount() {
     this._unsubscribe();
   }
-
   _toggle = () => {
     if (this._subscription) {
       this._unsubscribe();
@@ -48,7 +61,7 @@ export default class GyroscopeSensor extends React.Component {
     if(this.wsFound)
     {
       let { x, y, z } = this.state.gyroscopeData;
-      this.ws.send(JSON.stringify({x:x, y:y, z:z, side:"left"}))
+      this.ws.send(JSON.stringify({x:x, y:y, z:z, eventType:"EVENT_LEFT_CLICK"}));
       console.log(x+", "+ y+", "+z+", left");
     }
   }
@@ -57,7 +70,7 @@ export default class GyroscopeSensor extends React.Component {
     if(this.wsFound)
     {
       let { x, y, z } = this.state.gyroscopeData;
-      this.ws.send(JSON.stringify({x:x, y:y, z:z, side:"right"}))
+      this.ws.send(JSON.stringify({x:x, y:y, z:z, eventType:"EVENT_RIGHT_CLICK"}));
       console.log(x+", "+ y+", "+z+", right");
     }
   }
@@ -105,7 +118,7 @@ export default class GyroscopeSensor extends React.Component {
           <TouchableOpacity onPress={this._sendLeftClick}  style={styles.lbutton}>
             <Text>L</Text>
           </TouchableOpacity>
-          <TouchableOpacity _sendRightClick style={styles.rbutton}>
+          <TouchableOpacity onPress={this._sendRightClick} style={styles.rbutton}>
             <Text style={styles.rightbuttontext}>R</Text>
           </TouchableOpacity>
         </View>

@@ -1,7 +1,33 @@
 # Registration request
-POST http://localhost:5000 HTTP/1.1
+POST http://localhost:5000/submitDataMobile HTTP/1.1
 content-type: application/json
 
 {
-    
+    "name": "myName",
+    "i": "1",
+    "eventType": "EVENT_MOVE",
+    "x": 10,
+    "y": 5
+}
+
+
+
+##################
+
+
+POST http://localhost:5000/getDataDesktop HTTP/1.1
+content-type: application/json
+
+{
+    "name": "myName"
+}
+
+##################
+
+
+POST http://localhost:5000/getDataMyo HTTP/1.1
+content-type: application/json
+
+{
+    "name": "myName"
 }

@@ -5,3 +5,4 @@
 !.elasticbeanstalk/*.global.yml
 
 node_modules
+myo-sdk-win-0.9.0

@@ -5,12 +5,14 @@ var WebSocketServer = require('websocket').server;
 var connections = require('./classes/connections');
 var computerConnection = require('./classes/computerConnection');
 var mobileConnection = require('./classes/computerConnection');
+var currentdate = new Date();
 
 const connectEmitter = new EventEmitter();
 
 var store = new connections(connectEmitter);
 
 var dataCache = [];
+var mouseVelocity = {x: 0, y: 0, z: 0}
 var lastID = -1, acceptableRange = 1;
 var server = http.createServer(function(request, res) {
     if(request.method == "GET") {
@@ -28,9 +30,9 @@ wsServer = new WebSocketServer({
     httpServer: server
 });
 
-wsServer.on('message', (data) => {
-    console.log(data);
-});
+// wsServer.on('message', (data) => {
+//     console.log(data);
+// });
 
 wsServer.on('request', (request) => {
     // For now accept all requests and save the connection
@@ -46,18 +48,26 @@ wsServer.on('request', (request) => {
             return;
         }
         if (data.eventType == "EVENT_MOVE") {
-            var staticMul = 20;
-            data.x = data.x * staticMul; //the 20 is liable to change
-            data.y = data.y * staticMul;
-            data.z = data.z * staticMul;
+            currentdate = new Date();
+            var curTime = currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds() + ":" + currentdate.getMilliseconds();
+            var staticMul = 100000;
+            data.x = data.x; //the 20 is liable to change
+            data.y = data.y;
+            data.z = data.z;
             dataCache.push({id: data.i, eventType: data.eventType, 
                 data: 
                 {
-                    x: data.x,
-                    y: data.y,
-                    z: data.z    
+                    x: calculateDisplacement(mouseVelocity.x, data.x) * staticMul,
+                    y: calculateDisplacement(mouseVelocity.y, data.y) * staticMul,
+                    z: calculateDisplacement(mouseVelocity.z, data.z) * staticMul,
+                    time: curTime
                 }
             });
+        }
+        else {
+            if(data.eventType) {
+                dataCache.push({id: data.i, eventType: data.eventType, data: {}});
+            }
         }
     })
 
@@ -82,5 +92,10 @@ connectEmitter.on("connectionMade", (connection) => {
     // wsServer.
     console.log('lmao');
 });
+
+function calculateDisplacement(iV, accel) {
+    var time = 0.016;
+    return (iV * time) + (0.5 * accel * time * time);
+}
 
 server.listen(5000);

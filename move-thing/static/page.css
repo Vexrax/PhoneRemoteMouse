@@ -1,0 +1,22 @@
+.container-box {
+    /* width: 500px; */
+    max-width: 100vw;
+    min-height: 500px;
+    display: grid;
+    grid-template-areas: 'a b' 'c c';
+}
+
+.left-clit {
+    grid-area: a;
+    background-color: lightgray;
+}
+
+.right-clit {
+    grid-area: b;
+    background-color: gray;
+}
+
+.pad-clit {
+    grid-area: c;
+    background-color: red;
+}
